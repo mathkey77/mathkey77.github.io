@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Math Practice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- (나중에) 애드센스 코드 자리 -->
+  <!--
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR_ADSENSE_CLIENT_ID" crossorigin="anonymous"></script>
+  -->
+
+  <!-- 현대적인 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="container">
+
+  <!-- 상단 배너 광고 영역 (나중에 애드센스 코드 삽입) -->
+  <div id="top-ad-slot" class="top-ad-slot">
+    <!-- 예: <ins class="adsbygoogle" ... ></ins> -->
+  </div>
+
+  <!-- 1. 메인 메뉴 화면 -->
+  <div id="menu-screen" class="screen active">
+    <header class="header">
+      <p class="title">Math Practice</p>
+      <h1>수학 연산 트레이닝</h1>
+      <p class="subtitle">과정과 토픽을 선택하고 짧게 집중 연습해 보세요.</p>
+    </header>
+
+    <section class="section-card">
+      <div class="nes-field">
+        <label for="course-select">과정</label>
+        <div class="nes-select">
+          <select id="course-select">
+            <option value="" disabled selected>로딩 중...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="nes-field" style="margin-top:12px;">
+        <label for="topic-select">토픽</label>
+        <div class="nes-select">
+          <select id="topic-select">
+            <option value="" disabled selected>과정을 먼저 선택하세요</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <div class="nes-field">
+        <label>문제 수</label>
+        <div class="radio-group">
+          <label class="radio-pill">
+            <input type="radio" name="q-count" value="5" checked />
+            <span>5문제</span>
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="q-count" value="10" />
+            <span>10문제</span>
+          </label>
+            <label class="radio-pill">
+            <input type="radio" name="q-count" value="15" />
+            <span>15문제</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <button class="nes-btn is-primary" id="start-btn">연습 시작하기</button>
+  </div>
+
+  <!-- 2. 게임 화면 -->
+  <div id="game-screen" class="screen">
+    <div class="hud">
+      <span>남은 시간 <strong id="timer">00:00</strong></span>
+      <span>문제 <strong id="q-progress">1/5</strong></span>
+    </div>
+    <div id="time-bar-wrapper">
+      <div id="time-bar"></div>
+    </div>
+
+    <div class="question-box" id="question-text">문제를 불러오는 중...</div>
+    <div class="choices-grid" id="choices-container"></div>
+  </div>
+
+  <!-- 3. 결과 화면 -->
+  <div id="result-screen" class="screen">
+    <div class="result-inner">
+      <h2>연습 완료</h2>
+      <p class="result-line">점수 <span id="final-score"></span></p>
+      <p class="result-line">소요 시간 <span id="final-time"></span></p>
+      <button class="nes-btn" id="back-home-btn">처음으로 돌아가기</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
