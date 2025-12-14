@@ -1,165 +1,72 @@
-// ====== 설정: GAS 웹앱 URL ======
-const GAS_BASE_URL = "https://script.google.com/macros/s/AKfycbwc5Ke-k4Phf736PN8EhkdoTzlTX0ifB0h4HxTbI91TUCPHvnH-wAEaniohMWFbZ3xv/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbxFj53M2J48tUwM-G0nutcSG673n_0GhTBgOrhR5XlJ6rsVSKvKBR69RQY_5p_Mv3pg/exec"; 
 
-let courseTopicMap = {};  // 이제 시트에서 받아온 값으로 채움
+// 앱 시작 시 실행
+document.addEventListener('DOMContentLoaded', () => {
+    loadCoursesAndTopics();
+});
 
+async function loadCoursesAndTopics() {
+    const statusDiv = document.getElementById('status-message'); // 로딩 메시지 표시용
+    if(statusDiv) statusDiv.innerText = "데이터를 불러오는 중...";
 
-// ====== 게임 상태 ======
-let gameState = {
-  questions: [],
-  currentIdx: 0,
-  score: 0,
-  timerInterval: null,
-  startTime: 0,
-  endTime: 0,
-  totalQ: 0,
-  timeLimit: 0
-};
+    try {
+        // action 파라미터 정확히 전달
+        const response = await fetch(`${GAS_URL}?action=getCoursesAndTopics`);
+        
+        if (!response.ok) throw new Error("Network response was not ok");
+        
+        const data = await response.json();
+        
+        // 에러 응답인지 확인
+        if (data.error) {
+            console.error("Server Error:", data);
+            alert("데이터 로딩 실패: " + data.message);
+            return;
+        }
 
-// ====== 화면 전환 ======
-function switchScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-async function fetchCoursesAndTopics() {
-  const url = `${GAS_BASE_URL}?action=getCoursesAndTopics`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('과정/토픽 목록 로드 실패');
-  return await res.json(); // { "초등": ["분수의 덧셈", ...], ... }
-}
+        console.log("Loaded Data:", data); // 콘솔에서 데이터 확인
+        
+        // 여기에 드롭다운(Select box) 채우는 로직 실행
+        populateCourseSelect(data);
+        if(statusDiv) statusDiv.style.display = 'none'; // 로딩 메시지 숨기기
 
-// ====== 타이머 관련 ======
-function updateTimerDisplay(sec) {
-  const safeSec = Math.max(0, sec);
-  const m = Math.floor(safeSec / 60).toString().padStart(2,'0');
-  const s = (safeSec % 60).toString().padStart(2,'0');
-  document.getElementById('timer').innerText = `${m}:${s}`;
-
-  const ratio = gameState.timeLimit > 0 ? safeSec / gameState.timeLimit : 0;
-  document.getElementById('time-bar').style.width = (ratio * 100) + '%';
-  document.getElementById('timer').style.color = safeSec < 10 ? '#ef4444' : '#fbbf24';
-}
-
-function startTimer(limitSec) {
-  clearInterval(gameState.timerInterval);
-  gameState.startTime = new Date();
-  gameState.timeLimit = limitSec;
-  let remaining = limitSec;
-  updateTimerDisplay(remaining);
-
-  gameState.timerInterval = setInterval(() => {
-    remaining--;
-    updateTimerDisplay(remaining);
-    if (remaining <= 0) {
-      finishGame();
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        if(statusDiv) statusDiv.innerText = "연결 실패. 다시 시도해주세요.";
     }
-  }, 1000);
 }
 
-// ====== GAS에서 데이터 가져오기 ======
-async function fetchGameData(sheetName, count) {
-  const url = `${GAS_BASE_URL}?action=getGameData&sheetName=${encodeURIComponent(sheetName)}&count=${count}`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('게임 데이터 로드 실패');
-  return await res.json();
-}
+function populateCourseSelect(data) {
+    const courseSelect = document.getElementById('course-select');
+    const topicSelect = document.getElementById('topic-select');
+    
+    // 초기화
+    courseSelect.innerHTML = '<option value="">과정 선택</option>';
+    topicSelect.innerHTML = '<option value="">토픽 선택</option>';
 
-// ====== 문제 렌더링 ======
-function renderQuestion() {
-  const qData = gameState.questions[gameState.currentIdx];
-  document.getElementById('q-progress').innerText = `${gameState.currentIdx+1}/${gameState.totalQ}`;
-
-  const qBox = document.getElementById('question-text');
-  qBox.textContent = '';
-  qBox.innerHTML = qData.q;
-
-  const cContainer = document.getElementById('choices-container');
-  cContainer.innerHTML = '';
-  qData.choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = '';
-    btn.innerHTML = choice.text;
-    btn.onclick = () => checkAnswer(choice.isCorrect);
-    cContainer.appendChild(btn);
-  });
-
-  // KaTeX 렌더
-  try {
-    renderMathInElement(document.body, {
-      delimiters: [
-        {left: "$$", right: "$$", display: true},
-        {left: "\\(", right: "\\)", display: false}
-      ]
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
-
-function checkAnswer(isCorrect) {
-  if (isCorrect) gameState.score++;
-  gameState.currentIdx++;
-  if (gameState.currentIdx < gameState.totalQ) {
-    renderQuestion();
-  } else {
-    finishGame();
-  }
-}
-
-// ====== 게임 종료 ======
-function finishGame() {
-  clearInterval(gameState.timerInterval);
-  gameState.endTime = new Date();
-  const diffMs = gameState.endTime - gameState.startTime;
-  const elapsed = (diffMs / 1000).toFixed(3);
-
-  document.getElementById('final-score').innerText = `${gameState.score} / ${gameState.totalQ}`;
-  document.getElementById('final-time').innerText = `${elapsed}초`;
-
-  switchScreen('result-screen');
-}
-
-// ====== 과정/토픽 셀렉트 초기화 ======
-async function initCourseTopicSelect() {
-  const courseSel = document.getElementById('course-select');
-  const topicSel = document.getElementById('topic-select');
-
-  courseSel.innerHTML = '<option value="" disabled selected>로딩 중...</option>';
-  topicSel.innerHTML  = '<option value="" disabled>과정을 먼저 선택하세요</option>';
-
-  try {
-    courseTopicMap = await fetchCoursesAndTopics();
-
-    courseSel.innerHTML = '<option value="" disabled selected>과정을 선택하세요</option>';
-    Object.keys(courseTopicMap).forEach(course => {
-      const opt = document.createElement('option');
-      opt.value = course;
-      opt.innerText = course;
-      courseSel.appendChild(opt);
+    // 과정 목록 추가
+    Object.keys(data).forEach(course => {
+        const option = document.createElement('option');
+        option.value = course;
+        option.textContent = course;
+        courseSelect.appendChild(option);
     });
 
-    courseSel.addEventListener('change', () => {
-      const c = courseSel.value;
-      topicSel.innerHTML = '';
-      if (!c || !courseTopicMap[c]) {
-        topicSel.innerHTML = '<option value="" disabled selected>과정을 먼저 선택하세요</option>';
-        return;
-      }
-      courseTopicMap[c].forEach(t => {
-        const opt = document.createElement('option');
-        opt.value = t;
-        opt.innerText = t;
-        topicSel.appendChild(opt);
-      });
+    // 과정 선택 시 토픽 변경 이벤트
+    courseSelect.addEventListener('change', () => {
+        const selectedCourse = courseSelect.value;
+        topicSelect.innerHTML = '<option value="">토픽 선택</option>'; // 토픽 초기화
+        
+        if (selectedCourse && data[selectedCourse]) {
+            data[selectedCourse].forEach(topic => {
+                const option = document.createElement('option');
+                option.value = topic; // 나중에 API 호출 시 사용될 값
+                option.textContent = topic;
+                topicSelect.appendChild(option);
+            });
+        }
     });
-
-  } catch (e) {
-    alert('과정/토픽 목록을 불러오지 못했습니다: ' + e.message);
-    courseSel.innerHTML = '<option value="" disabled selected>에러</option>';
-  }
 }
-
 
 // ====== 게임 시작 ======
 async function startGame() {
@@ -202,5 +109,6 @@ window.addEventListener('load', () => {
     switchScreen('menu-screen');
   });
 });
+
 
 
