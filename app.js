@@ -162,6 +162,11 @@ function finishGame() {
   document.getElementById('final-score').innerText = `${gameState.score} / ${gameState.totalQ}`;
   document.getElementById('final-time').innerText = `${elapsed}초`;
 
+  const metaEl = document.getElementById('result-meta');
+if (metaEl) {
+  metaEl.innerText = `${getStudentName()} · ${currentSheetName} · ${currentQCount}문제`;
+}
+
   // 결과 화면으로 이동
   switchScreen('result-screen');
 }
@@ -343,4 +348,5 @@ window.addEventListener('load', async () => {
   document.getElementById('save-score-btn').addEventListener('click', onClickSaveScore);
   document.getElementById('view-ranking-btn').addEventListener('click', openRankingScreen);
 });
+
 
