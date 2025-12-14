@@ -311,8 +311,50 @@ button,
   font-weight: 600;
   color: var(--success);
 }
+.nes-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.95);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.ranking-table-wrap {
+  margin-top: 12px;
+  overflow: auto;
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  border-radius: 14px;
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 420px;
+}
+
+.ranking-table th, .ranking-table td {
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.ranking-table th {
+  color: var(--text-muted);
+  font-weight: 700;
+  background: rgba(2, 6, 23, 0.6);
+}
+
+.ranking-table tr:last-child td {
+  border-bottom: none;
+}
+
 
 #back-home-btn {
   width: 100%;
   margin-top: 16px;
 }
+
