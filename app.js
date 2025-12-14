@@ -31,6 +31,14 @@ function getStudentName() {
   const el = document.getElementById('student-name');
   return (el ? el.value : "").trim();
 }
+function bindClick(id, handler) {
+  const el = document.getElementById(id);
+  if (!el) {
+    console.warn(`Skip bind (missing): #${id}`);
+    return;
+  }
+  el.addEventListener('click', handler);
+}
 
 // GAS가 {ok,data}로 오든, 그냥 맵/배열로 오든 안전 파싱
 async function fetchJson(url) {
@@ -342,11 +350,16 @@ window.addEventListener('load', async () => {
   document.getElementById('start-btn').addEventListener('click', startGame);
 
   document.getElementById('back-home-btn').addEventListener('click', () => switchScreen('menu-screen'));
-  document.getElementById('back-home-btn-2').addEventListener('click', () => switchScreen('menu-screen'));
-  document.getElementById('back-result-btn').addEventListener('click', () => switchScreen('result-screen'));
+bindClick('start-btn', startGame);
 
-  document.getElementById('save-score-btn').addEventListener('click', onClickSaveScore);
-  document.getElementById('view-ranking-btn').addEventListener('click', openRankingScreen);
+bindClick('back-home-btn', () => switchScreen('menu-screen'));
+bindClick('back-home-btn-2', () => switchScreen('menu-screen'));
+bindClick('back-result-btn', () => switchScreen('result-screen'));
+
+bindClick('save-score-btn', onClickSaveScore);
+bindClick('view-ranking-btn', openRankingScreen);
+
 });
+
 
 
