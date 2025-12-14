@@ -200,6 +200,7 @@ function renderRankingTable(rows) {
   wrap.innerHTML = html;
 }
 
+
 async function openRankingScreen() {
   const topicKey = currentSheetName; // "<과정>주제" 그대로 저장/조회 키로 사용
   const qCount = currentQCount;
@@ -342,3 +343,4 @@ window.addEventListener('load', async () => {
   document.getElementById('save-score-btn').addEventListener('click', onClickSaveScore);
   document.getElementById('view-ranking-btn').addEventListener('click', openRankingScreen);
 });
+
