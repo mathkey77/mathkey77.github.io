@@ -31,9 +31,9 @@
   <!-- 1. 메인 메뉴 화면 -->
   <div id="menu-screen" class="screen active">
     <header class="header">
-      <p class="title">Math Practice</p>
-      <h1>수학 연산 트레이닝</h1>
-      <p class="subtitle">과정과 토픽을 선택하고 짧게 집중 연습해 보세요.</p>
+      <p class="title">Math Physical</p>
+      <h1>수학 피지컬 측정기</h1>
+      <p class="subtitle">과정과 토픽을 선택하고 짧게 집중 연습해 보세요. 랭킹을 통해 다른 학생들과 경쟁하세요.</p>
     </header>
         <section class="section-card">
       <div class="nes-field">
@@ -67,16 +67,16 @@
         <label>문제 수</label>
         <div class="radio-group">
           <label class="radio-pill">
-            <input type="radio" name="q-count" value="5" checked />
-            <span>5문제</span>
-          </label>
-          <label class="radio-pill">
-            <input type="radio" name="q-count" value="10" />
+            <input type="radio" name="q-count" value="10" checked />
             <span>10문제</span>
           </label>
-            <label class="radio-pill">
+          <label class="radio-pill">
             <input type="radio" name="q-count" value="15" />
             <span>15문제</span>
+          </label>
+            <label class="radio-pill">
+            <input type="radio" name="q-count" value="20" />
+            <span>20문제</span>
           </label>
         </div>
       </div>
@@ -87,9 +87,6 @@
 
   <!-- 2. 게임 화면 -->
   <div id="game-screen" class="screen">
-    <div class="hud">
-  <span><strong id="q-progress">1/5</strong></span>
-  </div>
     <div class="progress-area">
   <div id="time-bar-wrapper" class="progress-wrap">
     <div id="time-bar" class="progress-bar"></div>
@@ -106,7 +103,7 @@
  <!-- 3. 결과 화면 -->
 <div id="result-screen" class="screen">
   <div class="result-inner">
-    <h2>연습 완료</h2>
+    <h2>피지컬 측정 완료</h2>
 
     <p class="result-line">
       <span id="result-meta" style="color:#9ca3af;"></span>
@@ -148,6 +145,7 @@
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
