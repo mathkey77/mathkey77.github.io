@@ -99,17 +99,15 @@
     <div class="choices-grid" id="choices-container"></div>
   </div>
 
-  <!-- 3. 결과 화면 -->
- <div id="result-screen" class="screen">
+ <!-- 3. 결과 화면 -->
+<div id="result-screen" class="screen">
   <div class="result-inner">
     <h2>연습 완료</h2>
 
-    <!-- 어떤 연습을 했는지 메타 정보 -->
     <p class="result-line">
       <span id="result-meta" style="color:#9ca3af;"></span>
     </p>
 
-    <!-- 점수/시간을 카드처럼 보이게 -->
     <div class="section-card" style="margin-top:12px;">
       <p class="result-line" style="margin:0;">
         점수: <span id="final-score"></span>
@@ -119,25 +117,21 @@
       </p>
     </div>
 
-    <!-- 액션 버튼 -->
     <button class="nes-btn is-primary" id="save-score-btn">랭킹 저장하기</button>
     <button class="nes-btn" id="view-ranking-btn" style="margin-top:10px;">랭킹 보기</button>
-
-    <button class="nes-btn" id="back-home-btn" style="margin-top:14px;">처음으로 돌아가기</button>
+    <button class="nes-btn" id="back-home-btn" style="margin-top:14px;">처음으로</button>
   </div>
 </div>
-</div>
+
 <!-- 4. 랭킹 화면 -->
 <div id="ranking-screen" class="screen">
   <div class="result-inner">
     <h2>랭킹</h2>
 
-    <!-- 어떤 단원/문제수 랭킹인지 표시 -->
     <p class="result-line">
       <span id="ranking-meta" style="color:#9ca3af;"></span>
     </p>
 
-    <!-- 테이블이 여기에 렌더링됨(app.js의 renderRankingTable) -->
     <div id="ranking-table-wrap" class="ranking-table-wrap">
       <div style="padding:12px;">랭킹을 불러오는 중...</div>
     </div>
@@ -150,6 +144,7 @@
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
