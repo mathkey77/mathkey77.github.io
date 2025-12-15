@@ -90,27 +90,37 @@ async function fetchRankings(topicKey, qCount) {
     `&qCount=${encodeURIComponent(qCount)}`;
   return await fetchJson(url); // [{name,topic,qCount,score,time}, ...]
 }
+function formatMMSS(sec){
+  const s = Math.max(0, Math.floor(sec));
+  const m = Math.floor(s / 60).toString().padStart(2,'0');
+  const r = (s % 60).toString().padStart(2,'0');
+  return `${m}:${r}`;
+}
 
 function startTimer() {
   clearInterval(gameState.timerInterval);
   gameState.startTime = new Date();
 
-  // 더 이상 timeLimit/remaining을 쓰지 않음
-  gameState.timeLimit = 0;
+  const sw = document.getElementById('stopwatch');
+  if (sw) sw.innerText = "00:00";
 
   gameState.timerInterval = setInterval(() => {
-    // 화면 표시를 지웠다면, 여기서 DOM 업데이트를 하지 않아도 됨
-    // (기록은 finishGame에서 startTime/endTime으로 계산)
-  }, 1000);
+    const elapsedSec = (Date.now() - gameState.startTime.getTime()) / 1000;
+    if (sw) sw.innerText = formatMMSS(elapsedSec);
+  }, 250);
 }
+
 
 
 // ====== 렌더링 ======
 function renderQuestion() {
   const qData = gameState.questions[gameState.currentIdx];
+  const bar = document.getElementById('time-bar');
+  if (bar && gameState.totalQ > 0) {
+    const ratio = (gameState.currentIdx + 1) / gameState.totalQ;
+    bar.style.width = (ratio * 100) + '%';
+  }
 
-  document.getElementById('q-progress').innerText =
-    `${gameState.currentIdx + 1}/${gameState.totalQ}`;
 
   const qBox = document.getElementById('question-text');
   qBox.innerHTML = qData.q;
@@ -347,6 +357,7 @@ bindClick('save-score-btn', onClickSaveScore);
 bindClick('view-ranking-btn', openRankingScreen);
 
 });
+
 
 
 
