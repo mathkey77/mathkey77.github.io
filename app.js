@@ -121,20 +121,19 @@ function renderQuestion() {
     bar.style.width = (ratio * 100) + '%';
   }
 
-
   const qBox = document.getElementById('question-text');
-  qBox.innerHTML = qData.q;
+qBox.innerHTML = smartMathLayout(qData.q);  // 여기만 변경
 
-  const cContainer = document.getElementById('choices-container');
-  cContainer.innerHTML = '';
-
-  qData.choices.forEach(choice => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.innerHTML = choice.text;
-    btn.onclick = () => checkAnswer(choice.isCorrect);
-    cContainer.appendChild(btn);
-  });
+const cContainer = document.getElementById('choices-container');
+cContainer.innerHTML = '';
+qData.choices.forEach(choice => {
+  const btn = document.createElement('button');
+  btn.className = 'choice-btn';
+  btn.innerHTML = smartMathLayout(choice.text); // 보기에도 적용(권장)
+  btn.onclick = () => checkAnswer(choice.isCorrect);
+  cContainer.appendChild(btn);
+});
+ 
 
   // KaTeX 렌더
   try {
@@ -147,6 +146,26 @@ function renderQuestion() {
   } catch (e) {
     console.error(e);
   }
+}
+function smartMathLayout(text, inlineThreshold = 18) {
+  // $$...$$ 블록을 찾아서 내용 길이에 따라 inline으로 내릴지 결정
+  return String(text).replace(/\$\$([\s\S]+?)\$\$/g, (m, inner) => {
+    const content = inner.trim();
+
+    // 너무 길거나, 줄바꿈/정렬/분수 등 "블록이 어울리는" 패턴이면 블록 유지
+    const looksBlocky =
+      content.length > inlineThreshold ||
+      /\\frac|\\begin|\\sum|\\int|\\left|\\right|\\\\/.test(content) ||
+      /\n/.test(content);
+
+    if (looksBlocky) {
+      // 블록은 앞뒤로 줄바꿈을 강제로 넣어서 문장과 분리
+      return `\n$$${content}$$\n`;
+    }
+
+    // 짧은 건 inline으로 강등
+    return `$${content}$`;
+  });
 }
 
 function checkAnswer(isCorrect) {
@@ -357,6 +376,7 @@ bindClick('save-score-btn', onClickSaveScore);
 bindClick('view-ranking-btn', openRankingScreen);
 
 });
+
 
 
 
