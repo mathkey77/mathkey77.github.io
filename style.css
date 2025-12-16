@@ -413,43 +413,40 @@ button:disabled, .nes-btn:disabled{
 @media (max-width: 420px){
   .progress-overlay{ transform: translate(-50%, -45%); }
 }
-/* ===== 문제 텍스트 줄바꿈 안정화 ===== */
-.question-box{
-  justify-content: flex-start; /* center -> start */
-  text-align: left;
-}
-
+/* ===== 문제 텍스트: flex 폭 수축 방지(핵심) ===== */
 #question-text{
-  width: 100%;
-  max-width: 100%;
+  /* 기존 줄바꿈 세팅은 유지 */
   white-space: normal;
   word-break: keep-all;
   overflow-wrap: anywhere;
   line-break: strict;
-}
 
-#question-text,
-#question-text *{
+  /* 폭 관련: 이게 핵심 */
+  display: block;     /* (중요) flex 컨테이너 성격 제거 → 텍스트 박스는 블록이 더 안전 */
+  width: 100%;
   max-width: 100%;
+  min-width: 0;       /* flex 레이아웃에서 “이상하게 좁아짐” 방지에 매우 중요 */
+  overflow-x: hidden; /* 혹시 폭 계산이 틀어져도 가로로 밀어내지 않게 */
 }
 
-#question-text .katex-display{
-  overflow-x: auto;
-  overflow-y: hidden;
-  max-width: 100%;
+/* question-box 자체가 flex로 잡혀있어서 가운데 정렬이 폭을 망치면, 이것도 같이 */
+.question-box{
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  min-width: 0;   /* 같이 넣어주면 더 안전 */
 }
 
-/* (선택) KaTeX inline 쪽이 줄바꿈을 방해하면 사용 */
-#question-text .katex{
-  white-space: normal;
-}
 
 /* ===== 보기 버튼 텍스트 줄바꿈 안정화 ===== */
 .choice-btn{
+  min-width: 0;
   white-space: normal;
   word-break: keep-all;
   overflow-wrap: anywhere;
   line-break: strict;
+}
+
 
   /* 여러 줄일 때 위쪽 정렬(원치 않으면 center로 되돌려도 됨) */
   align-items: flex-start;
@@ -465,6 +462,7 @@ button:disabled, .nes-btn:disabled{
   overflow-y: hidden;
   max-width: 100%;
 }
+
 
 
 
