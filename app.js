@@ -188,7 +188,7 @@ function renderQuestion() {
 
   // 2. 질문 출력 (q가 객체라면 q.question 속성을 사용)
   // [object Object]가 나오는 이유는 객체 자체를 출력하려 했기 때문
-  const qString = (typeof q === 'object' && q.question) ? q.question : String(q);
+const qString = (typeof q === 'object') ? (q.question || q.q) : String(q);
   
   qTextEl.innerHTML = ''; // 초기화
   qTextEl.innerText = qString; 
@@ -289,3 +289,4 @@ window.addEventListener('load', async () => {
   if (saveBtn) saveBtn.onclick = onClickSaveScore;
   if (homeBtn) homeBtn.onclick = () => switchScreen('menu-screen');
 });
+
