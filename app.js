@@ -36,7 +36,7 @@ const staticPages = {
     content: `
       <h3>Contact Us</h3>
       <p>서비스 이용 중 불편한 점이나 제안 사항이 있다면 아래로 연락주세요.</p>
-      <p><strong>Email:</strong> support@mathphysical.com</p>
+      <p><strong>Email:</strong> mathkey77@gmail.com</p>
     `
   },
   privacy: {
@@ -361,3 +361,4 @@ window.addEventListener('load', async () => {
   bindClick('back-result-btn', () => switchScreen('result-screen'));
   bindClick('back-home-btn-2', () => switchScreen('menu-screen'));
 });
+
