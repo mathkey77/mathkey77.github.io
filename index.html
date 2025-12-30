@@ -2,16 +2,19 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Math Practice</title>
+  <title>Math Physical - 수학 개념 및 피지컬 훈련</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4334756219868470"
+  <meta name="description" content="수학 개념 정리와 연산 퀴즈를 한 곳에서. 초등, 중등 수학 피지컬을 측정하고 랭킹에 도전하세요. 무료 학습 사이트.">
+  <meta name="keywords" content="수학, 연산, 퀴즈, 초등수학, 중등수학, 수학개념, Math, 교육">
+  <meta property="og:title" content="Math Physical - 수학 실력 측정기">
+  <meta property="og:description" content="개념 학습 후 문제 풀이에 도전해보세요!">
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
      crossorigin="anonymous"></script>
 
-  <!-- 현대적인 폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
@@ -21,19 +24,17 @@
 <body>
 <div class="container">
 
-  <!-- 상단 배너 광고 영역 (나중에 애드센스 코드 삽입) -->
   <div id="top-ad-slot" class="top-ad-slot">
-    <!-- 예: <ins class="adsbygoogle" ... ></ins> -->
-  </div>
+    </div>
 
-  <!-- 1. 메인 메뉴 화면 -->
   <div id="menu-screen" class="screen active">
     <header class="header">
       <p class="title">Math Physical</p>
       <h1>수학 피지컬 측정기</h1>
       <p class="subtitle">과정과 토픽을 선택하고 짧게 집중 연습해 보세요. 랭킹을 통해 다른 학생들과 경쟁하세요.</p>
     </header>
-        <section class="section-card">
+
+    <section class="section-card">
       <div class="nes-field">
         <label for="student-name">이름</label>
         <input id="student-name" class="nes-input" type="text" placeholder="예: 홍길동" maxlength="12" />
@@ -72,7 +73,7 @@
             <input type="radio" name="q-count" value="15" />
             <span>15문제</span>
           </label>
-            <label class="radio-pill">
+          <label class="radio-pill">
             <input type="radio" name="q-count" value="20" />
             <span>20문제</span>
           </label>
@@ -81,79 +82,100 @@
     </section>
 
     <button class="nes-btn is-primary" id="start-btn">연습 시작하기</button>
+
+    <footer class="main-footer">
+      <div class="footer-links">
+        <button class="text-btn" onclick="openInfo('about')">소개</button>
+        <span class="sep">|</span>
+        <button class="text-btn" onclick="openInfo('privacy')">개인정보처리방침</button>
+        <span class="sep">|</span>
+        <button class="text-btn" onclick="openInfo('contact')">문의하기</button>
+      </div>
+      <p class="copyright">© 2025 Math Physical. All rights reserved.</p>
+    </footer>
   </div>
 
-  <!-- 2. 게임 화면 -->
+  <div id="article-screen" class="screen">
+    <div class="result-inner" style="text-align:left;">
+      <h2 id="article-title" style="color:var(--accent-strong); margin-bottom:10px;"></h2>
+      
+      <div id="article-content" class="section-card" style="min-height:200px; line-height:1.7; font-size:1rem; margin-bottom:20px;">
+        </div>
+
+      <button class="nes-btn is-primary" id="go-to-quiz-btn" style="width:100%;">이 개념으로 문제 풀기</button>
+      <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">뒤로 가기</button>
+    </div>
+  </div>
+
   <div id="game-screen" class="screen">
     <div class="progress-area">
-  <div id="time-bar-wrapper" class="progress-wrap">
-    <div id="time-bar" class="progress-bar"></div>
-  </div>
-  <div class="progress-overlay">
-    <span id="stopwatch" class="progress-chip">00:00</span>
-  </div>
-</div>
+      <div id="time-bar-wrapper" class="progress-wrap">
+        <div id="time-bar" class="progress-bar"></div>
+      </div>
+      <div class="progress-overlay">
+        <span id="stopwatch" class="progress-chip">00:00</span>
+      </div>
+    </div>
 
- <div class="question-box">
-  <div id="question-text">문제를 불러오는 중...</div>
-</div>
+    <div class="question-box">
+      <div id="question-text">문제를 불러오는 중...</div>
+    </div>
     <div class="choices-grid" id="choices-container"></div>
   </div>
 
- <!-- 3. 결과 화면 -->
-<div id="result-screen" class="screen">
-  <div class="result-inner">
-    <h2>피지컬 측정 완료</h2>
+  <div id="result-screen" class="screen">
+    <div class="result-inner">
+      <h2>피지컬 측정 완료</h2>
 
-    <p class="result-line">
-      <span id="result-meta" style="color:#9ca3af;"></span>
-    </p>
-
-    <div class="section-card" style="margin-top:12px;">
-      <p class="result-line" style="margin:0;">
-        점수: <span id="final-score"></span>
+      <p class="result-line">
+        <span id="result-meta" style="color:#9ca3af;"></span>
       </p>
-      <p class="result-line" style="margin:6px 0 0;">
-        소요 시간: <span id="final-time"></span>
+
+      <div class="section-card" style="margin-top:12px;">
+        <p class="result-line" style="margin:0;">
+          점수: <span id="final-score"></span>
+        </p>
+        <p class="result-line" style="margin:6px 0 0;">
+          소요 시간: <span id="final-time"></span>
+        </p>
+      </div>
+
+      <button class="nes-btn is-primary" id="save-score-btn">랭킹 저장하기</button>
+      <button class="nes-btn" id="view-ranking-btn" style="margin-top:10px;">랭킹 보기</button>
+      <button class="nes-btn" id="back-home-btn" style="margin-top:14px;">처음으로</button>
+    </div>
+  </div>
+
+  <div id="ranking-screen" class="screen">
+    <div class="result-inner">
+      <h2>랭킹</h2>
+
+      <p class="result-line">
+        <span id="ranking-meta" style="color:#9ca3af;"></span>
       </p>
+
+      <div id="ranking-table-wrap" class="ranking-table-wrap">
+        <div style="padding:12px;">랭킹을 불러오는 중...</div>
+      </div>
+
+      <button class="nes-btn" id="back-result-btn" style="margin-top:16px;">결과로 돌아가기</button>
+      <button class="nes-btn" id="back-home-btn-2" style="margin-top:10px;">처음으로</button>
     </div>
-
-    <button class="nes-btn is-primary" id="save-score-btn">랭킹 저장하기</button>
-    <button class="nes-btn" id="view-ranking-btn" style="margin-top:10px;">랭킹 보기</button>
-    <button class="nes-btn" id="back-home-btn" style="margin-top:14px;">처음으로</button>
   </div>
-</div>
 
-<!-- 4. 랭킹 화면 -->
-<div id="ranking-screen" class="screen">
-  <div class="result-inner">
-    <h2>랭킹</h2>
+  <div id="info-screen" class="screen">
+    <div class="result-inner" style="text-align:left;">
+      <h2 id="info-title" style="margin-bottom:12px;"></h2>
+      
+      <div id="info-content" class="section-card" style="font-size:0.9rem; line-height:1.6; max-height:60vh; overflow-y:auto;">
+        </div>
 
-    <p class="result-line">
-      <span id="ranking-meta" style="color:#9ca3af;"></span>
-    </p>
-
-    <div id="ranking-table-wrap" class="ranking-table-wrap">
-      <div style="padding:12px;">랭킹을 불러오는 중...</div>
+      <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:16px;">
+        닫기
+      </button>
     </div>
-
-    <button class="nes-btn" id="back-result-btn" style="margin-top:16px;">결과로 돌아가기</button>
-    <button class="nes-btn" id="back-home-btn-2" style="margin-top:10px;">처음으로</button>
   </div>
-</div>
 
-<script src="app.js"></script>
+</div> <script src="app.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
