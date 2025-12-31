@@ -138,7 +138,24 @@ function onClickStartBtn() {
   document.getElementById('article-title').innerText = `${cVal} - ${tVal}`;
   document.getElementById('article-content').innerHTML = "설명을 불러오는 중...";
 
+function onStartArticle() {
+  const course = document.getElementById('course-select')?.value;
+  const topic = document.getElementById('topic-select')?.value;
+
+  if (!course || !topic) {
+    alert("과정과 주제를 먼저 선택하세요.");
+    return;
+  }
+
+  // 🔥 여기서 상태 확정
+  currentCourse = course;
+  currentTopic = topic;
+  currentSheetName = `<${course}>${topic}`;
+
+  console.log("📌 article 진입 시 Sheet:", currentSheetName);
+
   switchScreen('article-screen');
+}
 
   // 설명 데이터 로드
   fetch(`${GAS_BASE_URL}?action=getDescription&topic=${encodeURIComponent(currentSheetName)}`)
@@ -438,6 +455,7 @@ window.addEventListener('load', () => {
     `);
   });
 });
+
 
 
 
