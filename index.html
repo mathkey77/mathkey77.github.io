@@ -82,61 +82,34 @@
     </section>
 
     <button class="nes-btn is-primary" id="start-btn">연습 시작하기</button>
-      <div id="intro-screen" class="screen">
-  <div class="section-card">
-    <h2>👋 서비스 소개</h2>
-    <p><strong>Math Physical</strong>은 수학 개념 학습과 피지컬(연산 속도) 훈련을 동시에 할 수 있는 무료 웹 서비스입니다.</p>
-    <ul style="padding-left: 20px; line-height: 1.8;">
-      <li>✨ <strong>개념 학습:</strong> 핵심 원리를 빠르게 복습합니다.</li>
-      <li>⚡ <strong>피지컬 훈련:</strong> 제한 시간 내에 문제를 푸는 연습을 합니다.</li>
-      <li>🏆 <strong>랭킹 시스템:</strong> 다른 친구들과 기록을 경쟁해보세요.</li>
-    </ul>
-    <p style="margin-top:15px; font-size:0.9rem; color:#666;">
-      이 서비스는 학생들의 수학 기초 체력을 기르기 위해 제작되었습니다.
-    </p>
   </div>
   <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">홈으로 돌아가기</button>
 </div>
-
-<div id="privacy-screen" class="screen">
-  <div class="section-card">
-    <h2>🔒 개인정보처리방침</h2>
-    <div style="font-size:0.9rem; line-height:1.6; color:#444; text-align:left;">
-      <p>본 서비스는 별도의 회원가입 없이 이용 가능하며, 랭킹 등록을 위해 최소한의 정보만 수집합니다.</p>
-      <hr style="margin:10px 0; border:0; border-top:1px solid #eee;">
-      <p><strong>1. 수집 항목:</strong> 닉네임, 게임 점수, 소요 시간, 기록 일시</p>
-      <p><strong>2. 수집 목적:</strong> 명예의 전당(랭킹) 서비스 제공</p>
-      <p><strong>3. 보유 기간:</strong> 서비스 종료 시까지 (요청 시 즉시 삭제)</p>
+<div id="article-screen" class="screen">
+  <div class="result-inner">
+    <h2 id="article-title">과정명 - 주제명</h2>
+    <div id="article-content" class="section-card" style="text-align:left; min-height:200px; margin-bottom:20px;">
+      설명을 불러오는 중...
     </div>
+    <button id="go-to-quiz-btn" class="nes-btn is-primary" style="width:100%;">이 개념으로 문제 풀기</button>
+    <button class="nes-btn" onclick="location.reload()" style="width:100%; margin-top:10px;">처음으로</button>
   </div>
-  <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">홈으로 돌아가기</button>
 </div>
-  <div id="article-screen" class="screen">
-    <div class="result-inner" style="text-align:left;">
-      <h2 id="article-title" style="color:var(--accent-strong); margin-bottom:10px;"></h2>
-      
-      <div id="article-content" class="section-card" style="min-height:200px; line-height:1.7; font-size:1rem; margin-bottom:20px;">
-        </div>
-
-      <button class="nes-btn is-primary" id="go-to-quiz-btn" style="width:100%;">이 개념으로 문제 풀기</button>
-      <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">뒤로 가기</button>
+<div id="game-screen" class="screen">
+  <div class="timer-wrapper" style="display:flex; align-items:center; margin-bottom:20px;">
+    <div class="timer-container" style="flex-grow:1; background:#eee; height:15px; border-radius:10px; overflow:hidden; margin-right:10px;">
+      <div id="time-bar" style="width:0%; height:100%; background:var(--accent); transition:width 0.3s;"></div>
     </div>
+    <div id="stopwatch" style="font-weight:bold;">00:00</div>
   </div>
 
-  <div id="game-screen" class="screen">
-<div class="timer-wrapper">
-  <div class="timer-container">
-    <div id="time-bar" style="width: 0%; height: 100%; background-color: var(--accent); transition: width 0.3s ease;"></div>
+  <div class="quiz-container">
+    <div id="q-number" style="font-weight:bold; color:var(--accent); margin-bottom:10px;">Q. 1 / 10</div>
+    <div id="q-text" class="q-text-box" style="font-size:1.2rem; margin-bottom:20px; min-height:80px;">문제를 불러오고 있습니다...</div>
+    <div id="choices" class="choices-grid">
+      </div>
   </div>
-  <div id="stopwatch">00:00</div>
 </div>
-    </div>
-
-    <div class="question-box">
-      <div id="question-text">문제를 불러오는 중...</div>
-    </div>
-    <div class="choices-grid" id="choices-container"></div>
-  </div>
 
   <div id="result-screen" class="screen">
     <div class="result-inner">
@@ -206,6 +179,7 @@
 
 </body>
 </html>
+
 
 
 
