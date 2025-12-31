@@ -331,6 +331,25 @@ window.addEventListener('load', async () => {
   if (quizStartBtn) quizStartBtn.onclick = onStartQuizFromArticle;
   if (saveBtn) saveBtn.onclick = onClickSaveScore;
   if (homeBtn) homeBtn.onclick = () => switchScreen('menu-screen');
+  // 1. 소개 버튼 연결
+  bindClick('nav-intro', () => switchScreen('intro-screen'));
+  bindClick('footer-intro', () => switchScreen('intro-screen')); // 푸터에 있다면
+
+  // 2. 개인정보 버튼 연결
+  bindClick('nav-privacy', () => switchScreen('privacy-screen'));
+  bindClick('footer-privacy', () => switchScreen('privacy-screen')); // 푸터에 있다면
+
+  // 3. 문의하기 버튼 연결 (이메일 보내기 창 띄우기)
+  const contactHandler = () => {
+    // 본인의 이메일 주소로 변경하세요!
+    const email = "your-email@gmail.com"; 
+    if (confirm(`운영자에게 메일을 보내시겠습니까?\n(${email})`)) {
+      window.location.href = `mailto:${email}`;
+    }
+  };
+  bindClick('nav-contact', contactHandler);
+  bindClick('footer-contact', contactHandler);
 });
+
 
 
