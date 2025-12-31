@@ -462,31 +462,49 @@ button:disabled, .nes-btn:disabled{
   overflow-y: hidden;
   max-width: 100%;
 }
-
-/* ... 기존 CSS 유지 ... */
-
-/* [추가] 푸터 및 링크 스타일 */
+/* 1. 푸터 전체 컨테이너 정렬 */
 .main-footer {
-  margin-top: 40px;
-  padding-top: 20px;
+  width: 100%;
+  max-width: 600px;      /* 메인 컨텐츠와 너비를 맞춤 */
+  margin: 60px auto 20px auto; /* 상단 여백을 주고 가로 중앙(auto) 정렬 */
+  padding: 20px 10px;
+  text-align: center;    /* 텍스트 및 인라인 요소 중앙 정렬 */
   border-top: 1px solid var(--border-soft);
-  text-align: center;
+  clear: both;
 }
+
+/* 2. 푸터 링크 버튼들을 가로로 나란히 & 중앙 정렬 */
 .footer-links {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 8px;
+  justify-content: center; /* flex 아이템들을 가로 중앙으로 */
+  align-items: center;     /* 세로 높이 맞춤 */
+  gap: 15px;               /* 버튼 사이 간격 */
+  margin-bottom: 12px;
+  flex-wrap: wrap;         /* 화면이 좁아지면 자연스럽게 줄바꿈 */
 }
-.footer-links .sep { color: #ccc; font-size: 0.8rem; }
-.copyright { font-size: 0.75rem; color: var(--text-muted); }
 
+/* 3. 텍스트 버튼 스타일 (버튼의 기본 스타일 제거) */
 .text-btn {
-  background: none; border: none; padding: 0;
-  color: var(--text-muted); font-size: 0.85rem;
-  cursor: pointer; text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  transition: color 0.2s;
 }
-.text-btn:hover { color: var(--accent-strong); }
+
+.text-btn:hover {
+  color: var(--accent); /* 호버 시 민트색으로 변경 */
+  text-decoration: underline;
+}
+
+/* 4. 저작권 텍스트 */
+.copyright {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0;
+}
 
 /* [추가] 아티클(개념) 화면 스타일 */
 #article-content h3 {
@@ -497,6 +515,7 @@ button:disabled, .nes-btn:disabled{
 #article-content p { margin-bottom: 12px; color: #444; }
 #article-content ul, #article-content ol { padding-left: 20px; margin-bottom: 12px; }
 #article-content img { max-width: 100%; border-radius: 8px; }
+
 
 
 
