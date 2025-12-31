@@ -212,54 +212,41 @@ function startTimer() {
 }
 
 // ====== [핵심 기능 4] 문제 렌더링 (프로그래스 바 적용) ======
+// app.js 내의 renderQuestion 함수 일부 수정
 function renderQuestion() {
   const q = gameState.questions[gameState.currentIdx];
-  const total = gameState.totalQ;
-  const current = gameState.currentIdx + 1;
+  if (!q) return; // 데이터가 없으면 중단
 
-  // 1. 프로그래스 바 업데이트 (진행률)
-  const progressPercent = ((current - 1) / total) * 100; 
-  const timeBar = document.getElementById('time-bar');
-  if (timeBar) {
-    // CSS transition 덕분에 부드럽게 차오름
-    timeBar.style.width = `${progressPercent}%`; 
-  }
+  // 프로그래스 바 업데이트
+  const progressPercent = (gameState.currentIdx / gameState.totalQ) * 100;
+  document.getElementById('time-bar').style.width = progressPercent + "%";
 
-  // 2. 문제 번호
-  const qNumEl = document.getElementById('q-number');
-  if (qNumEl) qNumEl.innerText = `Q. ${current} / ${total}`;
+  // 문제 텍스트 (서버 데이터 키 확인: q.question 인지 q.text 인지)
+  const questionText = q.text || q.question || "문제를 불러올 수 없습니다.";
+  document.getElementById('q-text').innerHTML = questionText.replace(/\n/g, '<br>');
 
-  // 3. 문제 텍스트 (KaTeX)
-  const qTextEl = document.getElementById('q-text');
-  if (qTextEl) {
-    qTextEl.innerHTML = q.text.replace(/\n/g, '<br>');
-    renderMathInElement(qTextEl, {
+  // 보기 버튼 (서버 데이터 키 확인: q.choices 인지 q.options 인지)
+  const choices = q.choices || q.options || [];
+  const choicesDiv = document.getElementById('choices');
+  choicesDiv.innerHTML = '';
+
+  choices.forEach(choice => {
+    const btn = document.createElement('button');
+    btn.className = 'nes-btn choice-btn';
+    btn.innerHTML = choice; 
+    btn.onclick = () => checkAnswer(choice);
+    choicesDiv.appendChild(btn);
+  });
+
+  // 수식 렌더링 재실행
+  if (typeof renderMathInElement === 'function') {
+    renderMathInElement(document.getElementById('game-screen'), {
       delimiters: [
         {left: "$$", right: "$$", display: true},
         {left: "$", right: "$", display: false}
       ]
     });
   }
-
-  // 4. 보기 버튼
-  const choicesDiv = document.getElementById('choices');
-  choicesDiv.innerHTML = '';
-
-  q.choices.forEach((choiceText) => {
-    const btn = document.createElement('button');
-    btn.className = 'nes-btn choice-btn';
-    btn.innerHTML = choiceText; // KaTeX 렌더링 전 raw string
-    btn.onclick = () => checkAnswer(choiceText);
-    choicesDiv.appendChild(btn);
-  });
-
-  // 보기 수식 렌더링
-  renderMathInElement(choicesDiv, {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "$", right: "$", display: false}
-    ]
-  });
 }
 
 // ====== [핵심 기능 5] 정답 확인 ======
@@ -429,3 +416,4 @@ window.addEventListener('load', () => {
     `);
   });
 });
+
