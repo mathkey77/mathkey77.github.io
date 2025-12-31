@@ -319,46 +319,34 @@ async function onClickSaveScore() {
 }
 
 // ====== [이벤트 바인딩] ======
-// app.js 맨 아래쪽의 로드 이벤트 부분
-
-window.addEventListener('load', async () => {
-  // 1. 기본 과정/토픽 데이터 로드
-  try {
-    await initCourseTopicSelect();
-  } catch (e) {
-    console.error("초기 데이터 로드 실패:", e);
-  }
-
-  // 2. 메인 화면 버튼들 연결
+window.addEventListener('load', () => {
+  // 1. 화면 전환 및 기본 버튼 연결은 '즉시' 실행 (데이터 기다리지 않음)
   bindClick('start-btn', onStartBtnClick);
-  bindClick('go-to-quiz-btn', startQuizDirectly); // 아티클 읽고 시작하는 버튼
+  bindClick('go-to-quiz-btn', startQuizDirectly);
   bindClick('save-score-btn', onClickSaveScore);
   bindClick('view-ranking-btn', () => showRanking(currentSheetName));
-  bindClick('back-home-btn', () => location.reload()); // 깔끔하게 처음으로
+  bindClick('back-home-btn', () => location.reload());
   bindClick('back-home-btn-2', () => location.reload());
   bindClick('back-result-btn', () => switchScreen('result-screen'));
 
-  // 3. [중요] 푸터 버튼들 연결 (HTML의 ID와 일치시킴)
-  
-  // 소개 버튼
-  bindClick('footer-intro', () => {
-    console.log("소개 화면으로 전환"); // 디버깅용
-    switchScreen('intro-screen');
-  });
-
-  // 개인정보 버튼
-  bindClick('footer-privacy', () => {
-    switchScreen('privacy-screen');
-  });
-
-  // 문의하기 버튼
+  // 푸터 버튼들도 즉시 연결 (이제 로딩 중에도 버튼은 작동합니다)
+  bindClick('footer-intro', () => switchScreen('intro-screen'));
+  bindClick('footer-privacy', () => switchScreen('privacy-screen'));
   bindClick('footer-contact', () => {
-    const email = "mathkey77@gmail.com"; // 본인 이메일로 수정
-    if (confirm(`운영자에게 문의 메일을 보내시겠습니까?\n(${email})`)) {
+    const email = "your-email@gmail.com";
+    if (confirm(`운영자에게 문의하시겠습니까?\n(${email})`)) {
       window.location.href = `mailto:${email}`;
     }
   });
-});
+
+  // 2. 데이터(과정/토픽) 로드는 백그라운드에서 별도로 실행
+  initCourseTopicSelect().then(() => {
+    console.log("데이터 로드 완료");
+  }).catch(e => {
+    console.error("데이터 로드 실패:", e);
+    const sel = document.getElementById('course-select');
+    if(sel) sel.innerHTML = '<option>데이터 로드 실패</option>';
+  });
 });
 
 
