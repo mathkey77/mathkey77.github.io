@@ -142,6 +142,22 @@ async function onStartQuizFromArticle() {
 
 // ====== 퀴즈 시작 ======
 async function startQuiz() {
+    if (!currentSheetName) {
+    const course = document.getElementById('course-select')?.value || currentCourse;
+    const topic = document.getElementById('topic-select')?.value || currentTopic;
+
+    if (!course || !topic) {
+      alert("과정/주제 정보가 유실되었습니다.\n처음 화면으로 돌아갑니다.");
+      switchScreen('menu-screen');
+      return;
+    }
+
+    currentCourse = course;
+    currentTopic = topic;
+    currentSheetName = `<${course}>${topic}`;
+  }
+
+  console.log("📌 startQuiz Sheet:", currentSheetName);
   const qRadio = document.querySelector('input[name="q-count"]:checked');
   currentQCount = qRadio ? Number(qRadio.value) : 10;
 
@@ -251,3 +267,4 @@ window.addEventListener('load', () => {
   bindClick('go-to-quiz-btn', onStartQuizFromArticle);
   bindClick('view-ranking-btn', showRanking);
 });
+
