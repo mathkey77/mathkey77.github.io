@@ -426,5 +426,58 @@ window.addEventListener('load', () => {
     `);
   });
 });
+/* 전체 화면 중앙 정렬 보정 */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center; /* 모든 내부 요소를 가로 중앙으로 */
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* 버튼 중앙 정렬 */
+.nes-btn {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%; /* 혹은 원하는 너비 */
+}
+
+/* 푸터 레이아웃 교정 */
+.main-footer {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto 20px auto; /* 위아래 여백 주고 중앙 정렬 */
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #eee;
+  clear: both; /* 주변 요소 간섭 방지 */
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center; /* 가로 중앙 */
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap; /* 모바일 대응 */
+}
+
+/* 섹션 카드 내 텍스트 정렬 */
+.section-card {
+  width: 100%;
+  text-align: center; /* 기본은 중앙 */
+}
+.section-card p, .section-card ul {
+  text-align: left; /* 본문 내용은 가독성을 위해 왼쪽 */
+  display: inline-block; /* 내용만큼만 차지하여 중앙에 위치하게 함 */
+}
 
 
