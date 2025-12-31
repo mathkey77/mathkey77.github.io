@@ -90,8 +90,37 @@
     <span class="sep">|</span>
     <button id="footer-contact" class="text-btn">문의하기</button>
   </div>
-  <p class="copyright">© 2024 Math Physical. All rights reserved.</p>
+  <p class="copyright">© 2026 Math Physical. All rights reserved.</p>
 </footer>
+      <div id="intro-screen" class="screen">
+  <div class="section-card">
+    <h2>👋 서비스 소개</h2>
+    <p><strong>Math Physical</strong>은 수학 개념 학습과 피지컬(연산 속도) 훈련을 동시에 할 수 있는 무료 웹 서비스입니다.</p>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+      <li>✨ <strong>개념 학습:</strong> 핵심 원리를 빠르게 복습합니다.</li>
+      <li>⚡ <strong>피지컬 훈련:</strong> 제한 시간 내에 문제를 푸는 연습을 합니다.</li>
+      <li>🏆 <strong>랭킹 시스템:</strong> 다른 친구들과 기록을 경쟁해보세요.</li>
+    </ul>
+    <p style="margin-top:15px; font-size:0.9rem; color:#666;">
+      이 서비스는 학생들의 수학 기초 체력을 기르기 위해 제작되었습니다.
+    </p>
+  </div>
+  <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">홈으로 돌아가기</button>
+</div>
+
+<div id="privacy-screen" class="screen">
+  <div class="section-card">
+    <h2>🔒 개인정보처리방침</h2>
+    <div style="font-size:0.9rem; line-height:1.6; color:#444; text-align:left;">
+      <p>본 서비스는 별도의 회원가입 없이 이용 가능하며, 랭킹 등록을 위해 최소한의 정보만 수집합니다.</p>
+      <hr style="margin:10px 0; border:0; border-top:1px solid #eee;">
+      <p><strong>1. 수집 항목:</strong> 닉네임, 게임 점수, 소요 시간, 기록 일시</p>
+      <p><strong>2. 수집 목적:</strong> 명예의 전당(랭킹) 서비스 제공</p>
+      <p><strong>3. 보유 기간:</strong> 서비스 종료 시까지 (요청 시 즉시 삭제)</p>
+    </div>
+  </div>
+  <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">홈으로 돌아가기</button>
+</div>
   <div id="article-screen" class="screen">
     <div class="result-inner" style="text-align:left;">
       <h2 id="article-title" style="color:var(--accent-strong); margin-bottom:10px;"></h2>
@@ -174,36 +203,9 @@
   </div>
 
 </div> <script src="app.js"></script>
-  <div id="intro-screen" class="screen">
-  <div class="section-card">
-    <h2>👋 서비스 소개</h2>
-    <p><strong>Math Physical</strong>은 수학 개념 학습과 피지컬(연산 속도) 훈련을 동시에 할 수 있는 무료 웹 서비스입니다.</p>
-    <ul style="padding-left: 20px; line-height: 1.8;">
-      <li>✨ <strong>개념 학습:</strong> 핵심 원리를 빠르게 복습합니다.</li>
-      <li>⚡ <strong>피지컬 훈련:</strong> 제한 시간 내에 문제를 푸는 연습을 합니다.</li>
-      <li>🏆 <strong>랭킹 시스템:</strong> 다른 친구들과 기록을 경쟁해보세요.</li>
-    </ul>
-    <p style="margin-top:15px; font-size:0.9rem; color:#666;">
-      이 서비스는 학생들의 수학 기초 체력을 기르기 위해 제작되었습니다.
-    </p>
-  </div>
-  <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">홈으로 돌아가기</button>
-</div>
 
-<div id="privacy-screen" class="screen">
-  <div class="section-card">
-    <h2>🔒 개인정보처리방침</h2>
-    <div style="font-size:0.9rem; line-height:1.6; color:#444; text-align:left;">
-      <p>본 서비스는 별도의 회원가입 없이 이용 가능하며, 랭킹 등록을 위해 최소한의 정보만 수집합니다.</p>
-      <hr style="margin:10px 0; border:0; border-top:1px solid #eee;">
-      <p><strong>1. 수집 항목:</strong> 닉네임, 게임 점수, 소요 시간, 기록 일시</p>
-      <p><strong>2. 수집 목적:</strong> 명예의 전당(랭킹) 서비스 제공</p>
-      <p><strong>3. 보유 기간:</strong> 서비스 종료 시까지 (요청 시 즉시 삭제)</p>
-    </div>
-  </div>
-  <button class="nes-btn" onclick="switchScreen('menu-screen')" style="width:100%; margin-top:10px;">홈으로 돌아가기</button>
-</div>
 </body>
 </html>
+
 
 
