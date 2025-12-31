@@ -561,6 +561,15 @@ button:disabled, .nes-btn:disabled{
   text-align: left; /* 본문 내용은 가독성을 위해 왼쪽 */
   display: inline-block; /* 내용만큼만 차지하여 중앙에 위치하게 함 */
 }
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.screen {
+  width: 100%;
+}
 
 
 
