@@ -164,20 +164,29 @@ function onClickStartBtn() {
 }
 
 // ====== [핵심 기능 3] 퀴즈 실행 ======
-async function onStartQuizFromArticle() {
-  const cVal = currentCourse || document.getElementById('course-select').value;
-  const tVal = currentTopic || document.getElementById('topic-select').value;
+function onStartQuizFromArticle() {
+  // 🔥 여기서 다시 확정
+  const courseSelect = document.getElementById('course-select');
+  const topicSelect = document.getElementById('topic-select');
 
-  if (!cVal || !tVal) {
-    alert("과정/주제 정보가 없습니다. 처음부터 다시 시작해주세요.");
-    location.reload();
+  const course = courseSelect?.value || currentCourse;
+  const topic = topicSelect?.value || currentTopic;
+
+  if (!course || !topic) {
+    alert("과정 또는 주제 정보가 없습니다.\n처음 화면으로 돌아갑니다.");
+    switchScreen('menu-screen');
     return;
   }
 
-  currentCourse = cVal;
-  currentTopic = tVal;
-  currentSheetName = `<${cVal}>${tVal}`;
+  // ✅ 여기서 최종 확정
+  currentCourse = course;
+  currentTopic = topic;
+  currentSheetName = `<${course}>${topic}`;
 
+  console.log("📌 최종 Sheet Name:", currentSheetName);
+
+  startQuiz(); // ← 여기서 fetch
+}
 
   switchScreen('game-screen');
   document.getElementById('q-text').innerText = "문제를 생성하고 있습니다...";
@@ -429,6 +438,7 @@ window.addEventListener('load', () => {
     `);
   });
 });
+
 
 
 
