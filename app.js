@@ -23,12 +23,9 @@ let gameState = {
 
 // ====== 유틸 ======
 function switchScreen(id) {
-  // 모든 화면 숨김
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  // 타겟 화면 표시
   const target = document.getElementById(id);
   if (target) target.classList.add('active');
-  // 스크롤 상단 이동
   window.scrollTo(0, 0);
 }
 
@@ -39,6 +36,24 @@ function getStudentName() {
 function bindClick(id, fn) {
   const el = document.getElementById(id);
   if (el) el.onclick = fn;
+}
+
+// ✅ [추가] 스마트 수식 변환 함수
+// 텍스트 내의 $$수식$$ 패턴을 찾아, 길이가 8자 미만이면 $수식$으로 변경
+function smartFormatMath(text) {
+  if (!text) return "";
+  
+  // 정규식: $$ 로 감싸진 구간을 찾습니다.
+  return text.replace(/\$\$(.*?)\$\$/g, (match, content) => {
+    // 내부 수식 텍스트의 앞뒤 공백을 제거한 길이가 8자 미만일 때
+    if (content.trim().length < 8) { 
+      // 인라인 수식 기호인 $로 감싸서 반환합니다.
+      // 결과 예: $x=3$
+      return `$${content.trim()}$`;
+    }
+    // 8자 이상이면 원래의 $$수식$$ 형태를 유지하여 블록 형태로 렌더링합니다.
+    return match;
+  });
 }
 
 // ====== 초기 데이터 로드 ======
@@ -129,7 +144,10 @@ async function onClickStartBtn() {
   try {
     const res = await fetch(`${GAS_BASE_URL}?action=getDescription&topic=${encodeURIComponent(currentSheetName)}`);
     const json = await res.json();
-    contentEl.innerHTML = json.ok && json.data ? json.data : "설명이 없습니다.";
+    
+    // ✅ 개념 설명에도 스마트 포맷 적용
+    const rawContent = json.ok && json.data ? json.data : "설명이 없습니다.";
+    contentEl.innerHTML = smartFormatMath(rawContent);
     renderMath(contentEl); 
   } catch {
     contentEl.innerText = "설명 로드 실패";
@@ -150,7 +168,7 @@ async function startQuiz() {
   switchScreen('game-screen');
   const qTextEl = document.getElementById('q-text');
   qTextEl.innerText = "문제를 불러오는 중...";
-  document.getElementById('choices').innerHTML = ""; // 초기화
+  document.getElementById('choices').innerHTML = ""; 
 
   try {
     const url = `${GAS_BASE_URL}?action=getGameData&topic=${encodeURIComponent(currentSheetName)}&count=${currentQCount}`;
@@ -190,7 +208,7 @@ function startTimer() {
   }, 1000);
 }
 
-// ====== 문제 렌더링 ======
+// ====== 문제 렌더링 (수정됨) ======
 function renderQuestion() {
   const q = gameState.questions[gameState.currentIdx];
   if (!q) return;
@@ -204,7 +222,8 @@ function renderQuestion() {
   }
   
   const qTextEl = document.getElementById('q-text');
-  qTextEl.innerHTML = q.text; 
+  // ✅ [수정] 문제 텍스트에 스마트 포맷 적용
+  qTextEl.innerHTML = smartFormatMath(q.text); 
   renderMath(qTextEl);
 
   const wrap = document.getElementById('choices');
@@ -212,7 +231,8 @@ function renderQuestion() {
 
   q.choices.forEach(c => {
     const btn = document.createElement('button');
-    btn.innerHTML = c; 
+    // ✅ [수정] 보기 텍스트에도 스마트 포맷 적용
+    btn.innerHTML = smartFormatMath(c); 
     btn.onclick = () => checkAnswer(c);
     wrap.appendChild(btn);
   });
@@ -249,9 +269,7 @@ async function showRanking() {
     const res = await fetch(`${GAS_BASE_URL}?action=getRankings&topic=${encodeURIComponent(currentSheetName)}`);
     const json = await res.json();
     
-    // ✅ JSON 그대로 뿌리지 않고 테이블 렌더링 함수 호출
     renderRankingTable(json.data, wrap);
-    
     document.getElementById('ranking-meta').innerText = `${currentCourse} > ${currentTopic}`;
 
   } catch {
@@ -259,12 +277,28 @@ async function showRanking() {
   }
 }
 
-// ✅ [추가] 랭킹 테이블 렌더링 함수
+// ✅ [수정] 랭킹 테이블 렌더링 함수 (정렬 로직 추가됨)
 function renderRankingTable(data, container) {
   if (!data || data.length === 0) {
     container.innerHTML = "<div style='text-align:center; padding:20px;'>아직 등록된 랭킹이 없습니다.</div>";
     return;
   }
+
+  // ✅ [중요] 클라이언트 측 정렬 로직
+  // 1순위: 점수 내림차순 (높은게 위로)
+  // 2순위: 시간 오름차순 (짧은게 위로)
+  data.sort((a, b) => {
+    const scoreA = Number(a.score);
+    const scoreB = Number(b.score);
+    const timeA = parseFloat(a.time);
+    const timeB = parseFloat(b.time);
+
+    if (scoreA !== scoreB) {
+      return scoreB - scoreA; // 점수 높은 순
+    } else {
+      return timeA - timeB; // 점수 같으면 시간 빠른 순
+    }
+  });
 
   let html = `
     <table class="ranking-table">
@@ -279,7 +313,7 @@ function renderRankingTable(data, container) {
       <tbody>
   `;
 
-  // 최대 10등까지만 보여주거나, 스크롤
+  // 최대 10등까지만 자르거나 전체 표시 (여기선 전체 표시 후 스크롤)
   data.forEach((row, idx) => {
     const rank = idx + 1;
     let badgeClass = '';
@@ -304,27 +338,17 @@ function renderRankingTable(data, container) {
 // ====== 이벤트 바인딩 ======
 window.addEventListener('load', () => {
   initCourseTopicSelect();
-
-  // 메인
   bindClick('start-btn', onClickStartBtn);
-  
-  // 아티클 화면
   bindClick('go-to-quiz-btn', onStartQuizFromArticle);
-  
-  // 결과 화면
   bindClick('view-ranking-btn', showRanking);
-  bindClick('back-to-menu-from-result', () => switchScreen('menu-screen')); // 결과 -> 처음
-  
-  // 랭킹 화면 (✅ ID 불일치 해결)
-  bindClick('back-result-btn', () => switchScreen('result-screen')); // 랭킹 -> 결과
-  bindClick('back-home-btn-2', () => switchScreen('menu-screen'));   // 랭킹 -> 처음
+  bindClick('back-to-menu-from-result', () => switchScreen('menu-screen'));
+  bindClick('back-result-btn', () => switchScreen('result-screen'));
+  bindClick('back-home-btn-2', () => switchScreen('menu-screen'));
 
-  // 점수 저장
   bindClick('save-score-btn', async () => {
     const name = getStudentName();
     const duration = ((gameState.endTime - gameState.startTime) / 1000).toFixed(2);
     
-    // 버튼 비활성화 (중복 클릭 방지)
     const btn = document.getElementById('save-score-btn');
     const originalText = btn.innerText;
     btn.disabled = true;
@@ -337,7 +361,7 @@ window.addEventListener('load', () => {
       
       if (json.ok) {
         alert("랭킹에 저장되었습니다!");
-        showRanking(); // 저장 후 바로 랭킹 보여주기
+        showRanking(); 
       } else {
         alert("저장 실패: " + json.error);
       }
