@@ -343,34 +343,106 @@ window.addEventListener('load', () => {
   bindClick('back-result-btn', () => switchScreen('result-screen'));
   bindClick('back-home-btn-2', () => switchScreen('menu-screen'));
 
-  bindClick('save-score-btn', async () => {
-    const name = getStudentName();
-    const duration = ((gameState.endTime - gameState.startTime) / 1000).toFixed(2);
-    
-    const btn = document.getElementById('save-score-btn');
-    const originalText = btn.innerText;
-    btn.disabled = true;
-    btn.innerText = "저장 중...";
+// ✅ 1. 점수 저장 시 문제 수 정보 포함
+bindClick('save-score-btn', async () => {
+  const name = getStudentName();
+  const duration = ((gameState.endTime - gameState.startTime) / 1000).toFixed(2);
+  
+  // 주제 이름 뒤에 문제 수를 붙여서 유니크한 키를 생성합니다.
+  const rankingKey = `${currentSheetName}_Q${gameState.totalQ}`;
 
-    try {
-      const url = `${GAS_BASE_URL}?action=saveScore&name=${encodeURIComponent(name)}&topic=${encodeURIComponent(currentSheetName)}&totalQ=${gameState.totalQ}&score=${gameState.score}&timeSec=${duration}`;
-      const res = await fetch(url);
-      const json = await res.json();
-      
-      if (json.ok) {
-        alert("랭킹에 저장되었습니다!");
-        showRanking(); 
-      } else {
-        alert("저장 실패: " + json.error);
-      }
-    } catch (e) {
-      alert("저장 중 오류 발생");
-    } finally {
-      btn.disabled = false;
-      btn.innerText = originalText;
+  const btn = document.getElementById('save-score-btn');
+  btn.disabled = true;
+  btn.innerText = "저장 중...";
+
+  try {
+    const url = `${GAS_BASE_URL}?action=saveScore&name=${encodeURIComponent(name)}&topic=${encodeURIComponent(rankingKey)}&totalQ=${gameState.totalQ}&score=${gameState.score}&timeSec=${duration}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    
+    if (json.ok) {
+      alert(`${gameState.totalQ}문제 모드 랭킹에 등록되었습니다!`);
+      showRanking(); 
     }
-  });
+  } catch (e) {
+    alert("저장 오류 발생");
+  } finally {
+    btn.disabled = false;
+    btn.innerText = "랭킹 기록하기";
+  }
 });
+
+// ✅ 2. 랭킹 조회 시에도 문제 수별로 호출
+async function showRanking() {
+  switchScreen('ranking-screen');
+  const wrap = document.getElementById('ranking-table-wrap');
+  wrap.innerHTML = "<div style='text-align:center; padding:20px;'>조회 중...</div>";
+
+  // 현재 푼 문제 수에 맞는 키로 조회
+  const rankingKey = `${currentSheetName}_Q${gameState.totalQ}`;
+
+  try {
+    const res = await fetch(`${GAS_BASE_URL}?action=getRankings&topic=${encodeURIComponent(rankingKey)}`);
+    const json = await res.json();
+    
+    renderRankingTable(json.data, wrap);
+    // 상단 제목에 문제 수 표시 추가
+    document.getElementById('ranking-meta').innerText = `${currentCourse} > ${currentTopic} (${gameState.totalQ}문제 모드)`;
+
+  } catch {
+    wrap.innerHTML = "<div style='text-align:center; color:red;'>로드 실패</div>";
+  }
+}
+
+// ✅ 3. 왕관 아이콘 및 중앙 정렬 렌더링
+function renderRankingTable(data, container) {
+  if (!data || data.length === 0) {
+    container.innerHTML = "<div style='text-align:center; padding:30px; color:#94a3b8;'>해당 모드에 등록된 첫 주인공이 되어보세요!</div>";
+    return;
+  }
+
+  // 정렬: 점수 높은 순 -> 시간 짧은 순
+  data.sort((a, b) => {
+    if (Number(b.score) !== Number(a.score)) return Number(b.score) - Number(a.score);
+    return parseFloat(a.time) - parseFloat(b.time);
+  });
+
+  let html = `
+    <table class="ranking-table">
+      <thead>
+        <tr>
+          <th>순위</th>
+          <th>이름</th>
+          <th>점수</th>
+          <th>시간</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  data.forEach((row, idx) => {
+    const rank = idx + 1;
+    let rankContent = rank;
+    let badgeClass = '';
+
+    // 1, 2, 3등에게만 왕관 배지 스타일 적용
+    if (rank === 1) { badgeClass = 'rank-1'; rankContent = '👑'; }
+    else if (rank === 2) { badgeClass = 'rank-2'; }
+    else if (rank === 3) { badgeClass = 'rank-3'; }
+
+    html += `
+      <tr>
+        <td><span class="rank-badge ${badgeClass}">${rankContent}</span></td>
+        <td><strong style="color:var(--text-main);">${row.name || '익명'}</strong></td>
+        <td><span style="color:var(--accent-strong); font-weight:700;">${row.score}점</span></td>
+        <td><span style="color:var(--text-muted); font-size:0.85rem;">${row.time}초</span></td>
+      </tr>
+    `;
+  });
+
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+}
 
 function renderMath(element) {
   if (window.renderMathInElement) {
@@ -384,4 +456,5 @@ function renderMath(element) {
     });
   }
 }
+
 
