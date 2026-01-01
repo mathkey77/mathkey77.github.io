@@ -213,7 +213,7 @@ function startTimer() {
   }, 1000);
 }
 
-// ====== 문제 렌더링 ======
+// ====== 문제 렌더링 (수정됨) ======
 function renderQuestion() {
   const q = gameState.questions[gameState.currentIdx];
   if (!q) return;
@@ -226,6 +226,7 @@ function renderQuestion() {
     progressText.innerText = `Q. ${gameState.currentIdx + 1} / ${gameState.totalQ}`;
   }
   
+  // 1. 문제 본문: 여전히 스마트 변환을 적용합니다. (길이가 짧으면 인라인으로 변경)
   const qTextEl = document.getElementById('q-text');
   qTextEl.innerHTML = smartFormatMath(q.text); 
   renderMath(qTextEl);
@@ -233,12 +234,18 @@ function renderQuestion() {
   const wrap = document.getElementById('choices');
   wrap.innerHTML = "";
 
+  // 2. 보기(선택지): 스마트 변환을 제거합니다.
   q.choices.forEach(c => {
     const btn = document.createElement('button');
-    btn.innerHTML = smartFormatMath(c); 
+    
+    // [수정 포인트] smartFormatMath(c) 대신 그냥 c를 넣습니다.
+    // 이렇게 하면 구글 시트에 적힌 $$수식$$ 형태가 그대로 유지되어 블록으로 렌더링됩니다.
+    btn.innerHTML = c; 
+    
     btn.onclick = () => checkAnswer(c);
     wrap.appendChild(btn);
   });
+  
   renderMath(wrap); 
 }
 
@@ -387,5 +394,6 @@ window.addEventListener('load', () => {
   bindClick('back-result-btn', () => switchScreen('result-screen'));
   bindClick('back-home-btn-2', () => switchScreen('menu-screen'));
 });
+
 
 
