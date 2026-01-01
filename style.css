@@ -169,16 +169,57 @@ body {
    Ranking Table (New)
    ========================= */
 .ranking-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.95rem; }
-.ranking-table th { text-align: left; color: var(--text-muted); font-weight: 600; padding: 12px 8px; border-bottom: 2px solid #e2e8f0; }
-.ranking-table td { padding: 16px 8px; border-bottom: 1px solid #f1f5f9; color: var(--text-main); font-weight: 500; }
-.ranking-table tr:last-child td { border-bottom: none; }
-.rank-badge {
-  display: inline-block; width: 24px; height: 24px; line-height: 24px;
-  border-radius: 50%; background: #f1f5f9; color: #64748b; text-align: center; font-size: 0.8rem; font-weight: 700;
+/* [수정] 랭킹 테이블 헤더 및 셀 중앙 정렬 */
+.ranking-table th {
+  text-align: center; /* 왼쪽 정렬에서 가운데 정렬로 변경 */
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 12px 8px;
+  border-bottom: 2px solid #e2e8f0;
 }
-.rank-1 { background: #fbbf24; color: white; }
-.rank-2 { background: #94a3b8; color: white; }
-.rank-3 { background: #b45309; color: white; }
+
+.ranking-table td {
+  text-align: center; /* 셀 내부 데이터도 가운데 정렬 */
+  padding: 16px 8px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+/* [수정] 메달 아이콘을 왕관/배지 느낌으로 변경 */
+.rank-badge {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  /* border-radius를 50%에서 조금 각진 형태로 바꾸면 배지 느낌이 납니다 */
+  border-radius: 6px; 
+  background: #f1f5f9;
+  color: #64748b;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 800;
+  position: relative;
+}
+
+/* 1등 왕관 느낌 (황금색) */
+.rank-1 {
+  background: #fbbf24;
+  color: white;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
+}
+
+/* 2등 (은색) */
+.rank-2 {
+  background: #94a3b8;
+  color: white;
+}
+
+/* 3등 (동색) */
+.rank-3 {
+  background: #b45309;
+  color: white;
+}
 
 /* =========================
    Footer
@@ -201,4 +242,5 @@ body {
   .header h1 { font-size: 1.75rem; }
   .result-value { font-size: 2.5rem; }
 }
+
 
