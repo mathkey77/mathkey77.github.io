@@ -426,7 +426,7 @@ window.addEventListener('load', () => {
   const btnContact = document.getElementById('btn-contact');
   if (btnContact) {
     btnContact.onclick = () => {
-      showInfoPopup('문의하기', '<p>오류 제보 및 제휴 문의는 아래 메일로 연락 부탁드립니다.</p><p><strong>Email: support@mathphysical.com</strong></p>');
+      showInfoPopup('문의하기', '<p>오류 제보 및 제휴 문의는 아래 메일로 연락 부탁드립니다.</p><p><strong>Email: mathkey77@gmail.com</strong></p>');
     };
   }
 });
@@ -444,5 +444,6 @@ function showInfoPopup(title, html) {
     if (typeof switchScreen === 'function') switchScreen('info-screen');
   }
 }
+
 
 
